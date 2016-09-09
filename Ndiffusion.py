@@ -3,6 +3,7 @@ import scipy.integrate as spi
 import numpy as np
 import pylab as pl
 import networkx as nx
+from random import random
 from numpy import linalg as la
 
 import matplotlib
@@ -22,11 +23,8 @@ gamma=2
 n=A.shape[1]
 
 #make sure length of I_init is equal to number of nodes
-I_init = [random.randint(0,1) for _ in range(nodes)]
-I_init=np.asarray(I_init)
-
-S_init = [1-i for i in I_init]
-S_init=np.asarray(S_init)
+I_init = np.random.randint(2,size=nodes)
+S_init = 1-I_init
 
 
 T=100

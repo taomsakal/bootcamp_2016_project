@@ -4,8 +4,9 @@ import pylab as pl
 import numpy.linalg as la
 import matplotlib.pyplot as plt
 import ggplot as gg
+import animator as a
 
-
+animator_obj = a.Animator()
 
 
 nodes = 5
@@ -66,7 +67,7 @@ for t in range(0, T - 1):
 S_w = np.dot(vmax, S)
 I_w = np.dot(vmax, I)
 
-
+animator_obj.make_animation(G, I, T)
 
 # --- Plotting --- # --------------------------
 

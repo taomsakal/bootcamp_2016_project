@@ -3,22 +3,23 @@ import numpy as np
 import pylab as pl
 import numpy.linalg as la
 import matplotlib.pyplot as plt
-import ggplot as gg
 import animator as a
 
 animator_obj = a.Animator()
 
 
-nodes = 5
-sick = 4  # Initial number of sick people
-G = nx.erdos_renyi_graph(nodes, 0.4)
+nodes = 15
+sick = 5  # Initial number of sick people
+
+#G = nx.erdos_renyi_graph(nodes, 0.4)
+
+#G = nx.watts_strogatz_graph(nodes,3, 0.5)
+
+
+G = nx.erdos_renyi_graph(nodes, 0.7)
+
+
 A = nx.to_numpy_matrix(G)
-
-nx.draw_spring(G)
-plt.style.use('ggplot')
-plt.show()
-
-print(A)
 
 beta = 1  # The infection rate
 gamma = 2
@@ -75,10 +76,10 @@ pl.figure(1)
 
 # Ploting
 # pl.plot(S, '-bs', label='Susceptibles')
-pl.plot(S_w, '-bs', label='Susceptibles')
+#pl.plot(S_w, '-bs', label='Susceptibles')
 
 # pl.plot(I, '-ro', label='Infectious')
-pl.plot(I_w, '-ro', label='Infectious')
+#pl.plot(I_w, '-ro', label='Infectious')
 
 # pl.legend(loc=0)
 pl.title('SI epidemic without births or deaths')
@@ -86,4 +87,4 @@ pl.xlabel('Time')
 pl.xlim([0,50])  # Limit the x-axis
 pl.ylabel('Susceptibles and Infectious')
 # pl.savefig('2.5-SIS-high.png', dpi=900) # This does increase the resolution.
-pl.show()
+#pl.show()

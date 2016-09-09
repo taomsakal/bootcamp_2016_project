@@ -35,11 +35,11 @@ class Animator(object):
         infected = []
 
         drawing = nx.draw_networkx_nodes(G, pos, nodelist=healthy, node_color='b')
-        # drawing = nx.draw_networkx_nodes(G,pos,nodelist=infected,node_color='g')
+        drawing = nx.draw_networkx_nodes(G,pos,nodelist=infected,node_color='r')
         edges = nx.draw_networkx_edges(G, pos)
 
-        anim = FuncAnimation(fig, self.update, interval=T, blit=True)  # This calls update with increasing n.
-        anim.save('erdos_anim.mp4', fps=6, extra_args=['-vcodec', 'libx264'])  # Saves the animation
+        anim = FuncAnimation(fig, self.update, interval=1000, repeat=True, blit=True)  # This calls update with increasing n.
+        anim.save('barabasi_anim.mp4', fps=6, extra_args=['-vcodec', 'libx264'])  # Saves the animation
 
 
     def update(self, n):
@@ -48,18 +48,16 @@ class Animator(object):
         :param n: The frame number we are on.
         :return: A single drawn frame.
         """
-        pop = [row[n] for row in self.I]  # The population at time n
+
+	pop = [row[n] for row in self.I]  # The population at time n
 
         # Get list of indices for the healthy and sick populations.
-        healthy = [i for node, i in enumerate(pop) if node == 0]
-        infected = [i for node, i in enumerate(pop) if node == 1]
+        healthy = [i for i,node in enumerate(pop) if node <= 0.5]
+        infected = [i for i,node in enumerate(pop) if node > 0.5]
 
         # Draws the graph.
         pos = nx.shell_layout(self.G)  # Gets the position of a layout for the drawing.
-        drawing = nx.draw_networkx_nodes(self.G, pos, nodelist=healthy, node_color='w')  # Draw healthy nodes white
-        drawing = nx.draw_networkx_nodes(self.G, pos, nodelist=infected, node_color='g')  # Draw infected nodes green
+        drawing = nx.draw_networkx_nodes(self.G, pos, nodelist=healthy, node_color='b')  # Draw healthy nodes white
+        drawing = nx.draw_networkx_nodes(self.G, pos, nodelist=infected, node_color='r')  # Draw infected nodes green
         return drawing,
-
-
-
 

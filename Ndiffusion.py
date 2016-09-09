@@ -1,84 +1,88 @@
-
-import scipy.integrate as spi
+import networkx as nx
 import numpy as np
 import pylab as pl
-import networkx as nx
-from random import random
-from numpy import linalg as la
-from random import random 
-import matplotlib
-
-import scipy.io as sio
+import numpy.linalg as la
+import matplotlib.pyplot as plt
+import ggplot as gg
 
 
-nodes = 15
-sick = 4
-G = nx.erdos_renyi_graph(nodes,0.4)
-A = nx.adjacency_matrix(G)
 
-print(A.todense())
 
-beta=1
-gamma=2
+nodes = 5
+sick = 4  # Initial number of sick people
+G = nx.erdos_renyi_graph(nodes, 0.4)
+A = nx.to_numpy_matrix(G)
 
-n=A.shape[1]
+nx.draw_spring(G)
+plt.style.use('ggplot')
+plt.show()
 
-#make sure length of I_init is equal to number of nodes
-#I_init = np.random.randint(2,size=nodes)
+print(A)
 
-I_init = np.asarray([1]*(sick)+[0]*(nodes-sick))
+beta = 1  # The infection rate
+gamma = 2
 
-S_init = 1-I_init
+n = A.shape[1]
 
-#T = iterations of propagation to run
-T=10
+# make sure length of I_init is equal to number of nodes
+# I_init = np.random.randint(2,size=nodes)
 
-#dt = size of time interval to simulate
-dt=1
+I_init = np.array([1] * (sick) + [0] * (nodes - sick))
 
-#eigenvalues, eigenvectors = la.eig(np.asarray(A))
-#index=np.argmax(eigenvalues)
-#vmax= eigenvectors[:index]
+S_init = 1 - I_init
 
-vmax = np.asarray([1]*nodes)
+# T = iterations of propagation to run
+T = 100
 
-I=np.zeros((n, T))
-S=np.zeros((n, T))
+# dt = size of time interval to simulate
+dt = 0.01
+
+
+eigenvalues, eigenvectors = la.eig(np.array(A))
+index = np.argmax(eigenvalues)
+vmax = eigenvectors[:index]
+
+vmax = np.array([1] * nodes)
+
+I = np.zeros((n, T))
+S = np.zeros((n, T))
 
 I[:, 0] = I_init
 S[:, 0] = S_init
 
-#the ODE
-for t in range(0, T-1):
-	for i in range(0, n-1):
-    		sum1=0;
-        	for j in range(0, n-1):
-       			sum1 = sum1 + A[i, j]*I[j,t];
+# the ODE
+for t in range(0, T - 1):
+    for i in range(0, n - 1):
+        sum1 = 0
+        for j in range(0, n - 1):
+            sum1 = sum1 + A[i, j] * I[j, t]
 
-		I[i,t+1] = max(0,min(1,I[i,t] + dt*beta*S[i,t]*sum1))
-		S[i,t+1] = max(0,min(1,S[i,t] - dt*beta*S[i,t]*sum1))
+        I[i, t + 1] = max(0, min(1, I[i, t] + dt * beta * S[i, t] * sum1))
+        S[i, t + 1] = max(0, min(1, S[i, t] - dt * beta * S[i, t] * sum1))
 
-print I
+# import sys
+# sys.exit()
 
-#import sys
-#sys.exit()
+S_w = np.dot(vmax, S)
+I_w = np.dot(vmax, I)
 
-S_w= np.dot(vmax,S)
-I_w= np.dot(vmax,I)
+
+
+# --- Plotting --- # --------------------------
 
 pl.figure(1)
 
-#Ploting
-#pl.plot(S, '-bs', label='Susceptibles')
+# Ploting
+# pl.plot(S, '-bs', label='Susceptibles')
 pl.plot(S_w, '-bs', label='Susceptibles')
 
-#pl.plot(I, '-ro', label='Infectious')
+# pl.plot(I, '-ro', label='Infectious')
 pl.plot(I_w, '-ro', label='Infectious')
 
-#pl.legend(loc=0)
+# pl.legend(loc=0)
 pl.title('SI epidemic without births or deaths')
 pl.xlabel('Time')
+pl.xlim([0,50])  # Limit the x-axis
 pl.ylabel('Susceptibles and Infectious')
-#pl.savefig('2.5-SIS-high.png', dpi=900) # This does increase the resolution.
+# pl.savefig('2.5-SIS-high.png', dpi=900) # This does increase the resolution.
 pl.show()
-

@@ -27,7 +27,7 @@ I_init=np.asarray([0]*nodes)
 I_init[0]=1
 
 S_init = 1 - I_init
-=======
+
 #make sure length of I_init is equal to number of nodes
 I_init = np.random.randint(2,size=nodes)
 S_init = 1-I_init

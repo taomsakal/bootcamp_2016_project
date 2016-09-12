@@ -1,16 +1,14 @@
-import random
-from array import array
-
-import matplotlib
 import matplotlib.pyplot as plt
 import networkx as nx
-import numpy as np
 from matplotlib.animation import FuncAnimation
 
 
 class Animator(object):
-
     def __init__(self):
+        """
+        We create self.I and self.G so that update() can reference these, as we can't pass them directly into
+        the animator?
+        """
         self.I = None
         self.G = None
 
@@ -38,9 +36,13 @@ class Animator(object):
         # drawing = nx.draw_networkx_nodes(G,pos,nodelist=infected,node_color='g')
         edges = nx.draw_networkx_edges(G, pos)
 
+        """
+        kwargs include repeat, repeat_delay, and interval: interval draws a new frame every interval milliseconds.
+        repeat controls whether the animation should repeat when the sequence of frames is completed.
+        repeat_delay optionally adds a delay in milliseconds before repeating the animation.
+        """
         anim = FuncAnimation(fig, self.update, interval=T, blit=True)  # This calls update with increasing n.
         anim.save('erdos_anim.mp4', fps=6, extra_args=['-vcodec', 'libx264'])  # Saves the animation
-
 
     def update(self, n):
         """
@@ -58,8 +60,4 @@ class Animator(object):
         pos = nx.shell_layout(self.G)  # Gets the position of a layout for the drawing.
         drawing = nx.draw_networkx_nodes(self.G, pos, nodelist=healthy, node_color='w')  # Draw healthy nodes white
         drawing = nx.draw_networkx_nodes(self.G, pos, nodelist=infected, node_color='g')  # Draw infected nodes green
-        return drawing,
-
-
-
-
+        return drawing,  # Must return a tuple

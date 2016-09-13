@@ -42,11 +42,7 @@ vmax = eigenvectors[:index]
 
 vmax = np.array([1] * nodes)
 
-I = np.zeros((n, T))  # Nodes by trails
-S = np.zeros((n, T))
 
-I[:, 0] = I_init
-S[:, 0] = S_init
 
 
 # --- The main simulation --- # --------------------
@@ -72,7 +68,15 @@ def run_simulation(type, G, I_init, beta, gamma, T, dt):
     if isinstance(I_init, int):
         I_init = np.array([1] * (sick) + [0] * (nodes - sick))
 
-    #S_init = 1 - I_init  # Susp. population.
+    S_init = 1 - I_init  # Susp. population.
+
+    # Init the history matrix from the infected and susp ones.
+    I = np.zeros((n, T))  # Nodes by trails
+    S = np.zeros((n, T))
+
+    I[:, 0] = I_init
+    S[:, 0] = S_init
+
 
     if type == 'SIS':
         run_SIS(G, I_init, beta, gamma, T, dt)

@@ -1,0 +1,32 @@
+## Disease Propagation Models
+#### SI
+
+- In the SI model, a member of the population progresses from susceptible to infected. Once the node is infected, it does not recover. This can be modeled using the equations that follow<sup>4</sup>
+
+$$
+\Large
+\begin{align*}
+\frac{d[S]}{dt} &= \beta [SI]\\
+\frac{d[I]}{dt} &= \beta[SI]
+\end{align*}
+ $$
+
+#### SIS
+
+- In the SIS model, once a node is infected, it is possible that it will recover, and rejoin the uninfected population. This recover rate is usually expressed as a probabilty over time. The total number of infected nodes is modeled with the following equation:<sup>5</sup>
+
+$$
+\Large
+\begin{align*}
+\frac{dS}{dt} &= - \beta SI + \alpha I \\
+\frac{dI}{dt} &= \beta SI - \alpha I 
+\end{align*}
+$$
+
+#### SIR
+- In the SIR model of disease propagation, once a node is infected, it is possible that it will recover. Furthermore, once a node is recovered, the particular node is no longer vulnerable to the infection. This would be relevant in diseases such as chickenpox, where infection leads to immunity in the vast majority of cases.<sup>6</sup>
+
+$$
+\Large
+\frac{dI}{dt} = ( \beta S(t)) - k) I(t)
+$$
